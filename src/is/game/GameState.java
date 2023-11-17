@@ -20,4 +20,6 @@ public class GameState
     }//getMoves
 
     public BoardManager.Player getPlayer(){ return toMove; }
+
+    public float getUtility(){ return utility; }
 }//is.game.GameState

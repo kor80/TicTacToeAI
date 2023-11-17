@@ -16,13 +16,13 @@ public class Algorithms
         this.game = game;
     }
 
-    public float minMaxDecision(GameState state){
+    public MyVector minMaxDecision(GameState state){
         player = state.getPlayer();
         return maxBetweenMin(game.actions(state),state);
     }//minMaxDecision
 
     private float maxValue(GameState state){
-        if(game.terminalTest(state) )
+        if(game.terminalTest() )
             return game.utility(state,player);
 
         float v = Integer.MIN_VALUE;
@@ -32,7 +32,7 @@ public class Algorithms
     }//maxValue
 
     private float minValue(GameState state){
-        if(game.terminalTest(state) )
+        if(game.terminalTest() )
             return game.utility(state,player);
 
         float v = Integer.MAX_VALUE;
@@ -41,12 +41,16 @@ public class Algorithms
         return v;
     }//minValue
 
-    private float maxBetweenMin(LinkedList<MyVector> actions, GameState state){
+    private MyVector maxBetweenMin(LinkedList<MyVector> actions, GameState state){
         float min = Integer.MAX_VALUE;
+        MyVector move = null;
         for( MyVector action : actions ){
             float v = minValue(game.result(state, action));
-            if( v < min ) min = v;
+            if( v < min ){
+                min = v;
+                move = action;
+            }
         }
-        return min;
+        return move;
     }//map
 }//Algorithms

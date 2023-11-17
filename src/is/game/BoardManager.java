@@ -6,7 +6,7 @@ public class BoardManager
 {
     private static BoardManager instance;
     private char[][] board;
-    private final int N = 3;
+    public final static int N = 3;
 
     public enum Player{
         X,
@@ -37,6 +37,18 @@ public class BoardManager
     public void clearCell(MyVector move){
         board[move.x][move.y] = '.';
     }//clearCell
+
+    public boolean checkCell(int x, int y, Player p){
+        return board[x][y] == Player.getChar(p);
+    }//checkCell
+
+    public boolean isBoardFull(){
+        for( int i = 0; i<N; i++)
+            for( int j=0; j<N; j++)
+                if( board[i][j] == '.' )
+                    return false;
+        return true;
+    }//isBoardFull
 
     public void display(){
         for( int i = 0; i<N; i++){
