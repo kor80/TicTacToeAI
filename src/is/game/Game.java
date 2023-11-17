@@ -1,5 +1,6 @@
 package is.game;
 
+import is.command.HistoryCommandHandler;
 import is.player.Player;
 import is.utils.MyVector;
 
@@ -7,11 +8,8 @@ import java.util.LinkedList;
 
 public abstract class Game
 {
-    private GameState initial;
-
-    protected Game( GameState initial ){
-        this.initial = initial;
-    }
+    protected GameState initial;
+    protected HistoryCommandHandler histCmdHandler;
 
     public abstract LinkedList<MyVector> actions(GameState state);
 
@@ -19,7 +17,7 @@ public abstract class Game
 
     public abstract float utility(GameState state, BoardManager.Player to_move);
 
-    public abstract boolean terminalTest();
+    public abstract boolean terminalTest(GameState state);
 
     public abstract BoardManager.Player toMove(GameState state);
 
@@ -28,16 +26,24 @@ public abstract class Game
     }//display
 
     public float play( Player... players){
+        System.out.println("Match started...");
         GameState state = initial;
+        int t=1;
         while( true ){
-            for( Player p : players){
+            System.out.printf("----------Turn %d----------%n",t);
+            for( Player p : players ){
+                System.out.printf("---> Player %s%n",state.getPlayer().getChar());
+                display();
                 MyVector move = p.getNextAction(state);
                 state = result(state, move);
-                if( terminalTest() ){
+                histCmdHandler.clearHistory();
+                if( terminalTest(state) ){
+                    System.out.println("Final board");
                     display();
                     return utility(state, toMove(initial));
                 }
             }
+            t ++;
         }
     }//play
 }//is.game.Game

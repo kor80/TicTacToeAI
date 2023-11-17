@@ -6,6 +6,10 @@ public class HistoryCommandHandler implements Handler
 {
     private LinkedList<Command> history;
 
+    public HistoryCommandHandler(){
+        history = new LinkedList<>();
+    }
+
     public void handle(Command cmd){
         cmd.doIt();
         history.addFirst(cmd);
@@ -15,4 +19,8 @@ public class HistoryCommandHandler implements Handler
         Command cmd = history.removeFirst();
         cmd.undoIt();
     }//cmd
+
+    public void clearHistory(){
+        history.clear();
+    }//clearStory
 }//HistoryCommandHandler

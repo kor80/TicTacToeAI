@@ -10,8 +10,9 @@ import java.util.Scanner;
 
 public class QueryPlayer implements Player
 {
-    private Game game;
-    private Scanner sc;
+    private final Game game;
+    private final Scanner sc;
+    private final int N = BoardManager.N;
 
     public QueryPlayer(Game game){
         this.game = game;
@@ -22,25 +23,32 @@ public class QueryPlayer implements Player
     public MyVector getNextAction(GameState state) {
         LinkedList<MyVector> actions = game.actions(state);
 
-        System.out.println("Current state:");
-        game.display();
-        System.out.println("Available moves: "+actions+"\n");
-
         MyVector move = null;
         if( !actions.isEmpty() ){
-            System.out.println("Make your move:");
-            move = new MyVector(takeInput("row"), takeInput("column"));
+            System.out.printf("Make your move (-1<row<%d , -1<column<%d):%n",N,N);
+            int x = takeInput("row");
+            int y = takeInput("column");
+            while( !BoardManager.getInstance().feasibleMove(x,y) ){
+                x = takeInput("row");
+                y = takeInput("column");
+            }
+            move = new MyVector(x, y);
         }
         else System.out.println("The match is ended");
         return move;
     }//getNextAction
 
-    private int takeInput( String what ){
-        System.out.printf("%s> ",what);
-        int input = sc.nextInt();
-        while( input < 1 || input > BoardManager.N ){
-            System.out.printf("Invalid %s. Please choose a number between 1 and %d %n",what,BoardManager.N);
-            System.out.printf("%s> ",what);
+    private int takeInput( String axis ){
+        System.out.printf("%s> ",axis);
+        int input;
+        try{
+            input = sc.nextInt();
+        }catch( Exception e ){
+            return -1;
+        }
+        while( input < 0 || input >= BoardManager.N ){
+            System.out.printf("Invalid %s. Please choose a number between 0 and %d %n",axis,N-1);
+            System.out.printf("%s> ",axis);
             input = sc.nextInt();
         }
         return input;

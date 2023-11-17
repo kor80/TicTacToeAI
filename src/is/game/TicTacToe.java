@@ -1,27 +1,27 @@
 package is.game;
 
 import is.command.ActionCommand;
-import is.command.Handler;
 import is.command.HistoryCommandHandler;
+import is.player.MinMaxPlayer;
+import is.player.Player;
 import is.utils.MyVector;
 
 import java.util.LinkedList;
 
 public class TicTacToe extends Game
 {
-    private LinkedList<MyVector> moves;
-    private int N;
-    private Handler histCmdHandler;
+    private final int N;
 
-    public TicTacToe( GameState initial ){
-        super(initial);
+    public TicTacToe( BoardManager.Player initialPlayer ){
         N = BoardManager.N;
         histCmdHandler = new HistoryCommandHandler();
 
-        moves = new LinkedList<>();
+        LinkedList<MyVector> moves = new LinkedList<>();
         for( int i = 0; i<N; i++)
-            for( int j=0; j<N; i++)
+            for( int j=0; j<N; j++)
                 moves.addLast(new MyVector(i,j));
+
+        initial = new GameState(initialPlayer,0,moves);
     }
 
     @Override
@@ -39,8 +39,9 @@ public class TicTacToe extends Game
         if( playerMoving == BoardManager.Player.X) nextPlayer = BoardManager.Player.O;
         else nextPlayer = BoardManager.Player.X;
 
-        moves.remove(move);
-        return new GameState(nextPlayer,computeUtility(move,nextPlayer),moves);
+        LinkedList<MyVector> newMoves = state.getMoves();
+        newMoves.remove(move);
+        return new GameState(nextPlayer,computeUtility(move,playerMoving),newMoves);
     }//result
 
     @Override
@@ -60,9 +61,10 @@ public class TicTacToe extends Game
 
     private boolean NInRow(MyVector move, BoardManager.Player player, MyVector deltaXY){
         int n = 0;
+
         int x = move.x;
         int y = move.y;
-        while( BoardManager.getInstance().checkCell(x,y,player) ){
+        while( BoardManager.getInstance().isCellOccupiedBy(x,y,player) ){
             n += 1;
             x += deltaXY.x;
             y += deltaXY.y;
@@ -70,7 +72,7 @@ public class TicTacToe extends Game
 
         x = move.x;
         y = move.y;
-        while( BoardManager.getInstance().checkCell(x,y,player) ){
+        while( BoardManager.getInstance().isCellOccupiedBy(x,y,player) ){
             n += 1;
             x -= deltaXY.x;
             y -= deltaXY.y;
@@ -81,12 +83,21 @@ public class TicTacToe extends Game
     }//NInRow
 
     @Override
-    public boolean terminalTest() {
-        return BoardManager.getInstance().isBoardFull();
+    public boolean terminalTest(GameState state) {
+        return state.getUtility() != 0 || state.getMoves().isEmpty();
     }//terminalTest
 
     @Override
     public BoardManager.Player toMove(GameState state) {
         return state.getPlayer();
     }//toMove
+
+    private HistoryCommandHandler getHandler(){ return histCmdHandler; }
+
+    public static void main(String[] args) {
+        TicTacToe ttt = new TicTacToe(BoardManager.Player.X);
+        Player p1 = new MinMaxPlayer(ttt, ttt.getHandler());
+        Player p2 = new MinMaxPlayer(ttt, ttt.getHandler());
+        System.out.println(ttt.play(p1,p2));
+    }//main
 }//Game

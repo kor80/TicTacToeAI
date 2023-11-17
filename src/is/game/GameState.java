@@ -5,8 +5,8 @@ import java.util.LinkedList;
 
 public class GameState
 {
-    private BoardManager.Player toMove;
-    private float utility;
+    private final BoardManager.Player toMove;
+    private final float utility;
     private LinkedList<MyVector> moves;
 
     public GameState(BoardManager.Player toMove, float utility, LinkedList<MyVector> moves){

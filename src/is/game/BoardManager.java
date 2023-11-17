@@ -4,7 +4,7 @@ import is.utils.MyVector;
 
 public class BoardManager
 {
-    private static BoardManager instance;
+    private static BoardManager Instance;
     private char[][] board;
     public final static int N = 3;
 
@@ -12,8 +12,8 @@ public class BoardManager
         X,
         O;
 
-        public static char getChar(Player to_move) {
-            return to_move == Player.X ? 'X' : 'O';
+        public char getChar() {
+            return this == Player.X ? 'X' : 'O';
         }
     }//Player
 
@@ -25,30 +25,27 @@ public class BoardManager
     }
 
     public static BoardManager getInstance(){
-        if( instance == null)
-            instance = new BoardManager();
-        return instance;
+        if( Instance == null)
+            Instance = new BoardManager();
+        return Instance;
     }
 
     public void setMove(MyVector move, Player to_move){
-        board[move.x][move.y] = Player.getChar(to_move);
+        board[move.x][move.y] = to_move.getChar();
     }//setMove
 
     public void clearCell(MyVector move){
         board[move.x][move.y] = '.';
     }//clearCell
 
-    public boolean checkCell(int x, int y, Player p){
-        return board[x][y] == Player.getChar(p);
+    public boolean isCellOccupiedBy(int x, int y, Player p){
+        if( x<0 || x>=N || y<0 || y>=N) return false;
+        return board[x][y] == p.getChar();
     }//checkCell
 
-    public boolean isBoardFull(){
-        for( int i = 0; i<N; i++)
-            for( int j=0; j<N; j++)
-                if( board[i][j] == '.' )
-                    return false;
-        return true;
-    }//isBoardFull
+    public boolean feasibleMove(int x, int y){
+        return board[x][y] == '.';
+    }//feasibleCell
 
     public void display(){
         for( int i = 0; i<N; i++){
@@ -56,5 +53,6 @@ public class BoardManager
                 System.out.print(board[i][j] + " ");
             System.out.println();
         }
+        System.out.println();
     }//display
 }//BoardManager
