@@ -27,8 +27,9 @@ public class AlphaBetaCutoffAlgorithm extends AbstractAlgorithms{
                 alpha = v;
                 bestAction = action;
             }
+            System.out.println("move: "+action+", v="+v);
         }
-        System.out.println(alpha);
+
         return bestAction;
     }//alphaBetaSearch
 

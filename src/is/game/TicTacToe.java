@@ -80,7 +80,7 @@ public class TicTacToe extends Game
         }
 
         n -= 1;
-        return n;
+        return Math.max(0,n);
     }//NInRow
 
     @Override
@@ -106,16 +106,18 @@ public class TicTacToe extends Game
         if( player == BoardManager.Player.X) opposite = BoardManager.Player.O;
         else opposite = BoardManager.Player.X;
 
+        int countCurrPlayer, countOppositePlayer;
+
         // Counting Lines
         for( int i=-1; i<2; i++){
-            int countCurrPlayer = NInRow(new MyVector(0,0), player, new MyVector(1,i));
-            int countOppositePlayer = NInRow(new MyVector(0,0), opposite, new MyVector(1,i));
+            countCurrPlayer = NInRow(new MyVector(0,0), player, new MyVector(1,i));
+            countOppositePlayer = NInRow(new MyVector(0,0), opposite, new MyVector(1,i));
             if( countCurrPlayer == 2 && countOppositePlayer == 0 ) utility += 1;
             else if( countOppositePlayer == 2 && countCurrPlayer == 0 ) utility -= 1;
         }
 
-        int countCurrPlayer = NInRow(new MyVector(0,0), player, new MyVector(0,1));
-        int countOppositePlayer = NInRow(new MyVector(0,0), opposite, new MyVector(0,1));
+        countCurrPlayer = NInRow(new MyVector(0,0), player, new MyVector(0,1));
+        countOppositePlayer = NInRow(new MyVector(0,0), opposite, new MyVector(0,1));
         if( countCurrPlayer == 2 && countOppositePlayer == 0 ) utility += 1;
         else if( countOppositePlayer == 2 && countCurrPlayer == 0 ) utility -= 1;
 
@@ -129,7 +131,7 @@ public class TicTacToe extends Game
     public static void main(String[] args) {
         TicTacToe ttt = new TicTacToe(BoardManager.Player.X);
         AIPlayer p1 = new AlphaBetaPlayer(ttt, ttt.getHandler());
-        AIPlayer p2 = new AlphaBetaCutoffPlayer(ttt, ttt.getHandler(),3);
+        AIPlayer p2 = new AlphaBetaCutoffPlayer(ttt, ttt.getHandler(),100);
         System.out.println(ttt.play(p1,p2));
     }//main
 }//Game
