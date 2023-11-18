@@ -113,4 +113,50 @@ public class Algorithms
 
 
     //------------------------------------ALPHA-BETA-CUTOFF------------------------------------
+    // This version of the alpha-beta cuts off the search space and uses an evaluation function
+    public MyVector alphaBetaCutoffSearch( GameState state ){
+        player = state.getPlayer();
+        float alpha = Integer.MIN_VALUE;
+        float beta = Integer.MAX_VALUE;
+        MyVector bestAction = null;
+        float v;
+
+        for( MyVector action : game.actions(state) ){
+            v = minValue(game.result(state,action), alpha, beta);
+            handler.undo();
+            if( v > alpha ){
+                alpha = v;
+                bestAction = action;
+            }
+        }
+        return bestAction;
+    }//alphaBetaSearch
+
+    private float maxValueCutoff(GameState state, float alpha, float beta ){
+        //if( game.cutoff_test(state, depth) )
+        //    return game.eval(state, player);
+
+        float v = Integer.MIN_VALUE;
+        for( MyVector action : game.actions(state) ){
+            v = Math.max(v, minValue(game.result(state,action), alpha, beta) );
+            handler.undo();
+            if( v >= beta ) return v;
+            alpha = Math.max(alpha, v);
+        }
+        return v;
+    }//maxValue
+
+    private float minValueCutoff(GameState state, float alpha, float beta){
+        //if(game.cutoff_test(state, depth) )
+            //return game.eval(state, player);
+
+        float v = Integer.MAX_VALUE;
+        for( MyVector action : game.actions(state) ){
+            v = Math.min(v, maxValue(game.result(state,action), alpha, beta) );
+            handler.undo();
+            if( v <= alpha ) return v;
+            beta = Math.min(beta,v);
+        }
+        return v;
+    }//minValue
 }//Algorithms

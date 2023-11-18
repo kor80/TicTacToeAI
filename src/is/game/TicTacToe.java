@@ -3,7 +3,6 @@ package is.game;
 import is.command.ActionCommand;
 import is.command.HistoryCommandHandler;
 import is.player.AlphaBetaPlayer;
-import is.player.MinMaxPlayer;
 import is.player.Player;
 import is.utils.MyVector;
 
@@ -94,6 +93,23 @@ public class TicTacToe extends Game
     }//toMove
 
     private HistoryCommandHandler getHandler(){ return histCmdHandler; }
+
+    // we set a fixed depth limit "d" so that CUTOFF-TEST(state, depth) returns true for all depth greater than
+    // some fixed depth d. (It must also return true for all terminal states, just as TERMINAL-TEST
+    public boolean cutoff_test(GameState state, int d) {
+        int depth = 0;
+        return depth > d || terminalTest(state);
+    }
+
+    // evaluation function TODO
+    public float eval(GameState state, BoardManager.Player player) {
+        float h_value = (float) 0.0;
+        BoardManager board = BoardManager.getInstance();
+        if(board.isCellOccupiedBy(N, N, player)) {
+            return h_value;
+        }
+         return h_value;      
+    }
 
     public static void main(String[] args) {
         TicTacToe ttt = new TicTacToe(BoardManager.Player.X);
