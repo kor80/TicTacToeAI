@@ -32,7 +32,6 @@ public class Algorithms
         float v = Integer.MIN_VALUE;
         for( MyVector action : game.actions(state) ){
             v = Math.max(v, minValue(game.result(state,action)) );
-            handler.undo();
         }
         return v;
     }//maxValue
