@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public abstract class Game
 {
     protected GameState initial;
-    public static int N;
+    public static int N = 3;
 
     public abstract LinkedList<MyVector> actions(GameState state);
 

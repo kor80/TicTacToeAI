@@ -14,7 +14,6 @@ public class GameState
         this.toMove = toMove;
         this.utility = utility;
         this.moves = moves;
-
         this.board = board;
     }
 
