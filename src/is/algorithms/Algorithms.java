@@ -1,6 +1,5 @@
 package is.algorithms;
 
-import is.command.HistoryCommandHandler;
 import is.game.BoardManager;
 import is.game.Game;
 import is.game.GameState;
@@ -12,11 +11,9 @@ public class Algorithms
 {
     private final Game game;
     private BoardManager.Player player = null;
-    private final HistoryCommandHandler handler;
 
-    public Algorithms(Game game, HistoryCommandHandler handler){
+    public Algorithms(Game game){
         this.game = game;
-        this.handler = handler;
     }
 
     //------------------------------------MIN-MAX------------------------------------
@@ -43,7 +40,6 @@ public class Algorithms
         float v = Integer.MAX_VALUE;
         for( MyVector action : game.actions(state) ){
             v = Math.min(v, maxValue(game.result(state,action)) );
-            handler.undo();
         }
         return v;
     }//minValue
@@ -53,7 +49,6 @@ public class Algorithms
         MyVector move = null;
         for( MyVector action : actions ){
             float v = minValue(game.result(state, action));
-            handler.undo();
             if( v > max ){
                 max = v;
                 move = action;
@@ -73,7 +68,6 @@ public class Algorithms
 
         for( MyVector action : game.actions(state) ){
             v = minValue(game.result(state,action), alpha, beta);
-            handler.undo();
             if( v > alpha ){
                 alpha = v;
                 bestAction = action;
@@ -89,7 +83,6 @@ public class Algorithms
         float v = Integer.MIN_VALUE;
         for( MyVector action : game.actions(state) ){
             v = Math.max(v, minValue(game.result(state,action), alpha, beta) );
-            handler.undo();
             if( v >= beta ) return v;
             alpha = Math.max(alpha, v);
         }
@@ -103,13 +96,9 @@ public class Algorithms
         float v = Integer.MAX_VALUE;
         for( MyVector action : game.actions(state) ){
             v = Math.min(v, maxValue(game.result(state,action), alpha, beta) );
-            handler.undo();
             if( v <= alpha ) return v;
             beta = Math.min(beta,v);
         }
         return v;
     }//minValue
-
-
-    //------------------------------------ALPHA-BETA-CUTOFF------------------------------------
 }//Algorithms

@@ -1,6 +1,5 @@
 package is.game;
 
-import is.command.HistoryCommandHandler;
 import is.player.Player;
 import is.utils.MyVector;
 
@@ -9,7 +8,6 @@ import java.util.LinkedList;
 public abstract class Game
 {
     protected GameState initial;
-    protected HistoryCommandHandler histCmdHandler;
 
     public abstract LinkedList<MyVector> actions(GameState state);
 
@@ -36,7 +34,6 @@ public abstract class Game
                 display();
                 MyVector move = p.getNextAction(state);
                 state = result(state, move);
-                histCmdHandler.clearHistory();
                 if( terminalTest(state) ){
                     System.out.println("Final board");
                     display();

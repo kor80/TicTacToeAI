@@ -1,7 +1,5 @@
 package is.game;
 
-import is.command.ActionCommand;
-import is.command.HistoryCommandHandler;
 import is.player.AlphaBetaPlayer;
 import is.player.MinMaxPlayer;
 import is.player.Player;
@@ -15,7 +13,6 @@ public class TicTacToe extends Game
 
     public TicTacToe( BoardManager.Player initialPlayer ){
         N = BoardManager.N;
-        histCmdHandler = new HistoryCommandHandler();
 
         LinkedList<MyVector> moves = new LinkedList<>();
         for( int i = 0; i<N; i++)
@@ -33,7 +30,6 @@ public class TicTacToe extends Game
     @Override
     public GameState result(GameState state, MyVector move) {
         BoardManager.Player playerMoving = state.getPlayer();
-        histCmdHandler.handle(new ActionCommand(move,state.getPlayer()));
         //From now on the internal state (board) is changed
 
         BoardManager.Player nextPlayer;
@@ -93,12 +89,10 @@ public class TicTacToe extends Game
         return state.getPlayer();
     }//toMove
 
-    private HistoryCommandHandler getHandler(){ return histCmdHandler; }
-
     public static void main(String[] args) {
         TicTacToe ttt = new TicTacToe(BoardManager.Player.X);
-        Player p1 = new AlphaBetaPlayer(ttt, ttt.getHandler());
-        Player p2 = new AlphaBetaPlayer(ttt, ttt.getHandler());
+        Player p1 = new AlphaBetaPlayer(ttt);
+        Player p2 = new AlphaBetaPlayer(ttt);
         System.out.println(ttt.play(p1,p2));
     }//main
 }//Game

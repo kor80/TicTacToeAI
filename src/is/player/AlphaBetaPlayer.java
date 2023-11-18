@@ -1,7 +1,6 @@
 package is.player;
 
 import is.algorithms.Algorithms;
-import is.command.HistoryCommandHandler;
 import is.game.Game;
 import is.game.GameState;
 import is.utils.MyVector;
@@ -9,8 +8,8 @@ import is.utils.MyVector;
 public class AlphaBetaPlayer implements Player{
     private final Algorithms algorithms;
 
-    public AlphaBetaPlayer(Game game, HistoryCommandHandler handler){
-        algorithms = new Algorithms(game,handler);
+    public AlphaBetaPlayer(Game game){
+        algorithms = new Algorithms(game);
     }
 
     @Override
