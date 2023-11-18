@@ -8,6 +8,7 @@ import java.util.LinkedList;
 public abstract class Game
 {
     protected GameState initial;
+    public static int N;
 
     public abstract LinkedList<MyVector> actions(GameState state);
 
@@ -19,8 +20,8 @@ public abstract class Game
 
     public abstract BoardManager.Player toMove(GameState state);
 
-    public void display(){
-        BoardManager.getInstance().display();
+    public void display(GameState state){
+        state.displayBoard();
     }//display
 
     public float play( Player... players){
@@ -31,12 +32,12 @@ public abstract class Game
             System.out.printf("----------Turn %d----------%n",t);
             for( Player p : players ){
                 System.out.printf("---> Player %s%n",state.getPlayer().getChar());
-                display();
+                display(state);
                 MyVector move = p.getNextAction(state);
                 state = result(state, move);
                 if( terminalTest(state) ){
                     System.out.println("Final board");
-                    display();
+                    display(state);
                     return utility(state, toMove(initial));
                 }
             }

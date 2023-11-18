@@ -12,7 +12,7 @@ public class QueryPlayer implements Player
 {
     private final Game game;
     private final Scanner sc;
-    private final int N = BoardManager.N;
+    private final int N = Game.N;
 
     public QueryPlayer(Game game){
         this.game = game;
@@ -28,7 +28,7 @@ public class QueryPlayer implements Player
             System.out.printf("Make your move (-1<row<%d , -1<column<%d):%n",N,N);
             int x = takeInput("row");
             int y = takeInput("column");
-            while( !BoardManager.getInstance().feasibleMove(x,y) ){
+            while( state.getBoard()[x][y] != '.' ){
                 x = takeInput("row");
                 y = takeInput("column");
             }
@@ -46,7 +46,7 @@ public class QueryPlayer implements Player
         }catch( Exception e ){
             return -1;
         }
-        while( input < 0 || input >= BoardManager.N ){
+        while( input < 0 || input >= Game.N ){
             System.out.printf("Invalid %s. Please choose a number between 0 and %d %n",axis,N-1);
             System.out.printf("%s> ",axis);
             input = sc.nextInt();

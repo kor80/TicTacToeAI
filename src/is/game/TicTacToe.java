@@ -9,17 +9,18 @@ import java.util.LinkedList;
 
 public class TicTacToe extends Game
 {
-    private final int N;
-
     public TicTacToe( BoardManager.Player initialPlayer ){
-        N = BoardManager.N;
-
         LinkedList<MyVector> moves = new LinkedList<>();
         for( int i = 0; i<N; i++)
             for( int j=0; j<N; j++)
                 moves.addLast(new MyVector(i,j));
 
-        initial = new GameState(initialPlayer,0,moves);
+        char[][] board = new char[N][N];
+        for( int i = 0; i<N; i++)
+            for( int j=0; j<N; j++)
+                board[i][j] = '.';
+
+        initial = new GameState(initialPlayer,0,moves, board);
     }
 
     @Override
@@ -30,15 +31,18 @@ public class TicTacToe extends Game
     @Override
     public GameState result(GameState state, MyVector move) {
         BoardManager.Player playerMoving = state.getPlayer();
-        //From now on the internal state (board) is changed
 
         BoardManager.Player nextPlayer;
         if( playerMoving == BoardManager.Player.X) nextPlayer = BoardManager.Player.O;
         else nextPlayer = BoardManager.Player.X;
 
+        char[][] newBoard = state.getBoard();
+        newBoard[move.x][move.y] = playerMoving.getChar();
+
         LinkedList<MyVector> newMoves = state.getMoves();
         newMoves.remove(move);
-        return new GameState(nextPlayer,computeUtility(move,playerMoving),newMoves);
+
+        return new GameState(nextPlayer,computeUtility(move,state,playerMoving),newMoves,newBoard);
     }//result
 
     @Override
@@ -47,21 +51,21 @@ public class TicTacToe extends Game
         return to_move == BoardManager.Player.X ? u : -u;
     }//utility
 
-    private float computeUtility(MyVector move, BoardManager.Player to_move){
-        if( NInRow(move,to_move,new MyVector(0,1)) || NInRow(move,to_move,new MyVector(1,0)) ||
-                NInRow(move,to_move,new MyVector(1,-1)) || NInRow(move,to_move,new MyVector(1,1)) ){
+    private float computeUtility(MyVector move, GameState state, BoardManager.Player to_move){
+        if( NInRow(move,state,to_move,new MyVector(0,1)) || NInRow(move,state,to_move,new MyVector(1,0)) ||
+                NInRow(move,state,to_move,new MyVector(1,-1)) || NInRow(move,state,to_move,new MyVector(1,1)) ){
             if( to_move == BoardManager.Player.X ) return 1;
             return -1;
         }
         else return 0;
     }//computeUtility
 
-    private boolean NInRow(MyVector move, BoardManager.Player player, MyVector deltaXY){
+    private boolean NInRow(MyVector move, GameState state, BoardManager.Player player, MyVector deltaXY){
         int n = 0;
 
         int x = move.x;
         int y = move.y;
-        while( BoardManager.getInstance().isCellOccupiedBy(x,y,player) ){
+        while( state.getBoard()[x][y] == player.getChar() ){
             n += 1;
             x += deltaXY.x;
             y += deltaXY.y;
@@ -69,7 +73,7 @@ public class TicTacToe extends Game
 
         x = move.x;
         y = move.y;
-        while( BoardManager.getInstance().isCellOccupiedBy(x,y,player) ){
+        while( state.getBoard()[x][y] == player.getChar() ){
             n += 1;
             x -= deltaXY.x;
             y -= deltaXY.y;
