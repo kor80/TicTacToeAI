@@ -7,7 +7,7 @@ import is.utils.MyVector;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class RandomPlayer implements Player{
+public class RandomPlayer extends HumanPlayer {
     private Game game;
     private Random rand;
 

@@ -8,13 +8,14 @@ import is.utils.MyVector;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class QueryPlayer implements Player
+public class QueryPlayer extends HumanPlayer
 {
     private final Game game;
     private final Scanner sc;
     private final int N = BoardManager.N;
 
     public QueryPlayer(Game game){
+        super();
         this.game = game;
         sc = new Scanner(System.in);
     }

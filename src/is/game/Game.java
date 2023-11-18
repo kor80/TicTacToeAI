@@ -1,6 +1,7 @@
 package is.game;
 
 import is.command.HistoryCommandHandler;
+import is.player.AIPlayer;
 import is.player.Player;
 import is.utils.MyVector;
 
@@ -21,11 +22,13 @@ public abstract class Game
 
     public abstract BoardManager.Player toMove(GameState state);
 
+    public abstract float eval(GameState state);
+
     public void display(){
         BoardManager.getInstance().display();
     }//display
 
-    public float play( Player... players){
+    public float play( AIPlayer... players){
         System.out.println("Match started...");
         GameState state = initial;
         int t=1;
