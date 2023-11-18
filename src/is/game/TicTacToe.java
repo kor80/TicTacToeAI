@@ -2,6 +2,7 @@ package is.game;
 
 import is.command.ActionCommand;
 import is.command.HistoryCommandHandler;
+import is.player.AlphaBetaPlayer;
 import is.player.MinMaxPlayer;
 import is.player.Player;
 import is.utils.MyVector;
@@ -96,8 +97,8 @@ public class TicTacToe extends Game
 
     public static void main(String[] args) {
         TicTacToe ttt = new TicTacToe(BoardManager.Player.X);
-        Player p1 = new MinMaxPlayer(ttt, ttt.getHandler());
-        Player p2 = new MinMaxPlayer(ttt, ttt.getHandler());
+        Player p1 = new AlphaBetaPlayer(ttt, ttt.getHandler());
+        Player p2 = new AlphaBetaPlayer(ttt, ttt.getHandler());
         System.out.println(ttt.play(p1,p2));
     }//main
 }//Game
